@@ -1,0 +1,14 @@
+services:
+  crm-api:
+    build: .
+    container_name: crm-api
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      # bash /dev/tcp check - the JRE image does not ship curl/wget
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8080'"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
